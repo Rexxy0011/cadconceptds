@@ -4,11 +4,13 @@ import { Toaster } from "react-hot-toast"; // ✅ Import here
 import Home from "./Pages/Home";
 import Aboutus from "./Pages/Aboutus";
 import Courses from "./Pages/Courses";
+import ScrollToTop from "./Components/ScrollToTop";
 
 const App = () => {
   return (
     <>
       {/* All your routes */}
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<Aboutus />} />

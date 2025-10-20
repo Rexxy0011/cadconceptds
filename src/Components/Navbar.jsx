@@ -14,40 +14,50 @@ const Navbar = () => {
     { name: "Contact Us", path: "/#contact-us" },
   ];
 
-  // handle smooth scroll for contact
+  // ✅ Handle navigation & scrolling
   const handleNavClick = (path) => {
     setSidebarOpen(false);
 
+    // Handle "Contact Us" smooth scroll
     if (path.includes("#")) {
       const id = path.split("#")[1];
 
-      // if already on home page, just scroll
       if (location.pathname === "/") {
         const el = document.getElementById(id);
         if (el) el.scrollIntoView({ behavior: "smooth" });
       } else {
-        // if not on home, navigate home then scroll
         navigate("/");
         setTimeout(() => {
           const el = document.getElementById(id);
           if (el) el.scrollIntoView({ behavior: "smooth" });
         }, 600);
       }
-    } else {
-      navigate(path);
+      return;
     }
+
+    // ✅ If already on Home and click Home → scroll to top
+    if (path === "/" && location.pathname === "/") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    // Navigate normally
+    navigate(path);
   };
 
   return (
     <div className="fixed top-0 left-0 w-full flex justify-between items-center px-4 sm:px-12 lg:px-24 xl:px-40 py-4 sm:py-6 z-50 bg-white/90 backdrop-blur-md shadow-md font-medium">
       {/* Logo (clickable to Home) */}
-      <Link to="/" className="flex items-center gap-2">
+      <button
+        onClick={() => handleNavClick("/")}
+        className="flex items-center gap-2"
+      >
         <img
           src={assets.logo11}
           alt="Logo"
           className="w-28 sm:w-36 cursor-pointer"
         />
-      </Link>
+      </button>
 
       {/* Navigation Links */}
       <div
@@ -71,7 +81,6 @@ const Navbar = () => {
         {navItems.map((item, index) => {
           const basePath = item.path.split("#")[0];
           const shouldShowActive =
-            // keep active states for About/Courses only
             !["Home", "Contact Us"].includes(item.name) &&
             location.pathname === basePath;
 
